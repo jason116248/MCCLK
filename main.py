@@ -219,23 +219,23 @@ if __name__ == '__main__':
         if 1:
             """testing"""
             test_s_t = time()
-            # ret = test(model, user_dict, n_params)
+            ret = test(model, user_dict, n_params)
             test_auc, test_f1 = ctr_eval(model, test_cf_pairs)
 
             test_e_t = time()
             # ctr_info = 'epoch %.2d  test auc: %.4f f1: %.4f'
             # logging.info(ctr_info, epoch, test_auc, test_f1)
             train_res = PrettyTable()
-            # train_res.field_names = ["Epoch", "training time", "tesing time", "Loss", "recall", "ndcg", "precision",
-            #                          "hit_ratio", "auc"]
-            # train_res.add_row(
-            #     [epoch, train_e_t - train_s_t, test_e_t - test_s_t, loss.item(), ret['recall'], ret['ndcg'],
-            #      ret['precision'], ret['hit_ratio'], ret['auc']]
-            # )
-            train_res.field_names = ["Epoch", "training time", "tesing time", "Loss", "test auc", "test f1"]
+            train_res.field_names = ["Epoch", "training time", "tesing time", "Loss", "recall", "ndcg", "precision",
+                                     "hit_ratio", "auc"]
             train_res.add_row(
-                    [epoch, train_e_t - train_s_t, test_e_t - test_s_t, loss.item(), test_auc, test_f1]
-                )
+                [epoch, train_e_t - train_s_t, test_e_t - test_s_t, loss.item(), ret['recall'], ret['ndcg'],
+                 ret['precision'], ret['hit_ratio'], ret['auc']]
+            )
+#             train_res.field_names = ["Epoch", "training time", "tesing time", "Loss", "test auc", "test f1"]
+#             train_res.add_row(
+#                     [epoch, train_e_t - train_s_t, test_e_t - test_s_t, loss.item(), test_auc, test_f1]
+#                 )
             # train_res.field_names = ["Recall@5", "Recall@10", "Recall@20", "Recall@50", "Recall@100"]
             # train_res.add_row([recall[0], recall[1], recall[2], recall[3], recall[4]])
             print(train_res)
