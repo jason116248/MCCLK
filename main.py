@@ -221,6 +221,7 @@ if __name__ == '__main__':
             test_s_t = time()
             ret = test(model, user_dict, n_params)
             test_auc, test_f1 = ctr_eval(model, test_cf_pairs)
+#             recall = topk_eval(model, train_cf, test_cf)
 
             test_e_t = time()
             # ctr_info = 'epoch %.2d  test auc: %.4f f1: %.4f'
@@ -236,7 +237,7 @@ if __name__ == '__main__':
 #             train_res.add_row(
 #                     [epoch, train_e_t - train_s_t, test_e_t - test_s_t, loss.item(), test_auc, test_f1]
 #                 )
-            # train_res.field_names = ["Recall@5", "Recall@10", "Recall@20", "Recall@50", "Recall@100"]
-            # train_res.add_row([recall[0], recall[1], recall[2], recall[3], recall[4]])
+#             train_res.field_names = ["Recall@5", "Recall@10", "Recall@20", "Recall@50", "Recall@100"]
+#             train_res.add_row([recall[0], recall[1], recall[2], recall[3], recall[4]])
             print(train_res)
     print('early stopping at %d, test_auc:%.4f' % (epoch-30, cur_best_pre_0))
