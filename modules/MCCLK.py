@@ -401,33 +401,33 @@ class Recommender(nn.Module):
         # cor_loss = self.sim_decay * cor
         return bce_loss + emb_loss + 0.001*loss_contrast, scores, bce_loss, emb_loss
 
-    # def generate(self):
-    #     user_emb = self.all_embed[:self.n_users, :]
-    #     item_emb = self.all_embed[self.n_users:, :]
-    #     entity_gcn_emb, user_gcn_emb, item_adj = self.gcn(user_emb,
-    #                                                       item_emb,
-    #                                                       self.edge_index,
-    #                                                       self.edge_type,
-    #                                                       self.interact_mat,
-    #                                                       mess_dropout=self.mess_dropout,
-    #                                                       node_dropout=self.node_dropout)
-    #
-    #     interact_mat_new = torch.sparse.mm(self.interact_mat, item_adj)
-    #     indice_old = interact_mat_new._indices()
-    #     value_old = interact_mat_new._values()
-    #     x = indice_old[0, :]
-    #     y = indice_old[1, :]
-    #     x_A = x
-    #     y_A = y + self.n_users
-    #     x_A_T = y + self.n_users
-    #     y_A_T = x
-    #     x_new = torch.cat((x_A, x_A_T), dim=-1)
-    #     y_new = torch.cat((y_A, y_A_T), dim=-1)
-    #     indice_new = torch.cat((x_new.unsqueeze(dim=0), y_new.unsqueeze(dim=0)), dim=0)
-    #     value_new = torch.cat((value_old, value_old), dim=-1)
-    #     interact_graph = torch.sparse.FloatTensor(indice_new, value_new, torch.Size(
-    #         [self.n_users + self.n_entities, self.n_users + self.n_entities]))
-    #     user_lightgcn_emb, item_lightgcn_emb = self.light_gcn(user_emb, item_emb, interact_graph)
-    #     u_e = torch.cat((user_gcn_emb, user_lightgcn_emb), dim=-1)
-    #     i_e = torch.cat((entity_gcn_emb, item_lightgcn_emb), dim=-1)
-    #     return i_e, u_e
+    def generate(self):
+        user_emb = self.all_embed[:self.n_users, :]
+        item_emb = self.all_embed[self.n_users:, :]
+        entity_gcn_emb, user_gcn_emb, item_adj = self.gcn(user_emb,
+                                                          item_emb,
+                                                          self.edge_index,
+                                                          self.edge_type,
+                                                          self.interact_mat,
+                                                          mess_dropout=self.mess_dropout,
+                                                          node_dropout=self.node_dropout)
+    
+        interact_mat_new = torch.sparse.mm(self.interact_mat, item_adj)
+        indice_old = interact_mat_new._indices()
+        value_old = interact_mat_new._values()
+        x = indice_old[0, :]
+        y = indice_old[1, :]
+        x_A = x
+        y_A = y + self.n_users
+        x_A_T = y + self.n_users
+        y_A_T = x
+        x_new = torch.cat((x_A, x_A_T), dim=-1)
+        y_new = torch.cat((y_A, y_A_T), dim=-1)
+        indice_new = torch.cat((x_new.unsqueeze(dim=0), y_new.unsqueeze(dim=0)), dim=0)
+        value_new = torch.cat((value_old, value_old), dim=-1)
+        interact_graph = torch.sparse.FloatTensor(indice_new, value_new, torch.Size(
+            [self.n_users + self.n_entities, self.n_users + self.n_entities]))
+        user_lightgcn_emb, item_lightgcn_emb = self.light_gcn(user_emb, item_emb, interact_graph)
+        u_e = torch.cat((user_gcn_emb, user_lightgcn_emb), dim=-1)
+        i_e = torch.cat((entity_gcn_emb, item_lightgcn_emb), dim=-1)
+        return i_e, u_e
